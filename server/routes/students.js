@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const models = require('../../db/models');
+const models = require('../db/models');
 const Student = models.Student;
 const Campus = models.Campus;
 
@@ -32,7 +32,7 @@ router.get('/', function(req, res, next) {
   Campus.findOne({where: {name: `${campusName}`}})
   .then(assignedCampus => {
     //assignedCampus = campus instance from the database
-    return Student.create({name: studentName, email: studentEmail, campusId: assignedCampus.id})
+    return Student.create({name: studentName, email: studentEmail, campusName: campusName, campusId: assignedCampus.id})
   })
   .then(newStudent => {
     res.json(newStudent);
@@ -46,17 +46,17 @@ router.get('/', function(req, res, next) {
 })
 
 //DELETE A STUDENT PROFILE
-.delete('/:studentId', function(req, res, next) {
-  let studentId = req.params.studentId;
+.delete('/:studentName', function(req, res, next) {
+  let name = req.params.studentName;
 
-  Student.findById(studentId)
+  Student.findOne({where: {name}})
   .then(student => {
-    let destroyedStudent = student.name;
-    student.destroy();
-    return destroyedStudent;
+    return student.destroy();
   })
-  .then(destroyedStudent => {
-    res.send(`You deleted the student ${destroyedStudent}`)
+  .then(deletedStudent => {
+    console.log('deletedStudent =', deletedStudent)
+    res.send(204, deletedStudent)
+    // res.sendStatus(204)
   })
   .catch(next)
 })

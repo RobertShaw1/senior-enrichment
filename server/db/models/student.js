@@ -12,9 +12,13 @@ const Student = db.define('student', {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  campusName: {
+    type: Sequelize.STRING
+  },
 })
 
-Campus.hasMany(Student)
+// Campus.hasMany(Student)
+Campus.belongsToMany(Student, {through: 'StudentCampus'})
 Student.belongsTo(Campus) //----> Adds 'campusId' to Student
 
 module.exports = Student;
