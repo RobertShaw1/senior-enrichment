@@ -1,17 +1,7 @@
 /*ELEMENTS*/
-
-/*a {
-  text-align: center;
-}*/
-
 body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans,Unbuntu, Cantarell,Helvetica,Neue, sans-serif;
-    /*the above dynamically styles font based on the machine*/
-}
-
-.nav {
-  padding: 0;
-  list-style-type: none;
+    /*the above dynamically styles font based on the user's machine*/
 }
 
 
@@ -26,7 +16,7 @@ body {
   justify-content: center;
   width: 350px;
   border-radius: 5%;
-  }
+}
 
 .home-title {
   margin: 20px;
@@ -47,8 +37,9 @@ body {
   list-style-type: none;
 }
 
-.nav-bar {
-  
+.nav {
+  padding: 0;
+  list-style-type: none;
 }
 
 .navBarList {
