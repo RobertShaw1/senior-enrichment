@@ -1,7 +1,7 @@
 'use strict';
 const Sequelize = require('sequelize') ;
 const db = require('../index');
-const Student = require('./student');
+// const Student = require('./student');
 
 const Campus = db.define('campus', {
   name: {
@@ -9,7 +9,7 @@ const Campus = db.define('campus', {
     allowNull: false,
   },
   image: {
-    type: Sequelize.TEXT
+    type: Sequelize.STRING(1000)
   }
 })
 
