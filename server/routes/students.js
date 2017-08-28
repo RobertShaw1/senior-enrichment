@@ -51,12 +51,10 @@ router.get('/', function(req, res, next) {
 
   Student.findOne({where: {name}})
   .then(student => {
-    return student.destroy();
-  })
-  .then(deletedStudent => {
-    console.log('deletedStudent =', deletedStudent)
-    res.send(204, deletedStudent)
-    // res.sendStatus(204)
+    let deletedStudent = student.dataValues;
+    student.destroy();
+    // console.log('deletedStudent =', deletedStudent);
+    res.json(deletedStudent);
   })
   .catch(next)
 })
