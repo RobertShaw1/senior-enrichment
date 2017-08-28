@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import store from '../../store';
-import {addCampus} from '../../reducers'
-import axios from 'axios';
+import {createCampus, editCampusName} from '../../reducers'
 
 export default class AddCampus extends Component {
   constructor(props) {
     super(props);
     this.state = store.getState();
+
+    this.handleNameChange = this.handleNameChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -17,26 +17,22 @@ export default class AddCampus extends Component {
     })
   }
 
+  handleNameChange(event) {
+    let campusName = event.target.value;
+    store.dispatch(editCampusName(campusName))
+  }
+
   handleSubmit(event) {
     event.preventDefault();
-    // console.log('inputCampusName: ', event.target.querySelector('#inputCampusName').value)
-    // console.log('inputCampusImage: ', event.target.querySelector('#inputCampusImage').value)
 
-    const name = event.target.querySelector('#inputCampusName').value;
-    const image = event.target.querySelector('#inputCampusImage').value;
+    const name = event.target.inputCampusName.value;
+    const image = event.target.inputCampusImage.value;
 
-    axios.post('/api/campuses/addcampus', {name, image})
-    .then(res => res.data)
-    .then(campus => {
-      const addCampusAction = addCampus(campus)
-      store.dispatch(addCampusAction);
-    })
-    .catch(err => {
-      console.log(err)
-    })
+    const createCampusThunk = createCampus(name, image);
+    store.dispatch(createCampusThunk);
 
-    event.target.querySelector('#inputCampusName').value = '';
-    event.target.querySelector('#inputCampusImage').value = '';
+    event.target.inputCampusName.value = '';
+    event.target.inputCampusImage.value = '';
   }
 
   componentWillUnmount() {
@@ -52,13 +48,13 @@ export default class AddCampus extends Component {
         <div className="form-group">
           <label className="col-sm-2 control-label">Campus Name</label>
           <div className="col-sm-10">
-            <input className="form-control" placeholder="Campus Name" id="inputCampusName" />
+            <input className="form-control" placeholder="Campus Name" name="inputCampusName" onChange={this.handleNameChange} />
           </div>
         </div>
         <div className="form-group">
           <label className="col-sm-2 control-label">Image</label>
           <div className="col-sm-10">
-            <input className="form-control" placeholder="Image" id="inputCampusImage" />
+            <input className="form-control" placeholder="Image" name="inputCampusImage" />
           </div>
         </div>
         <div className="form-group">

@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import store from '../../store';
-import {addStudent} from '../../reducers'
-import axios from 'axios';
+import {createStudent, editStudentName, editStudentEmail, fetchCampuses} from '../../reducers'
 
 export default class AddStudent extends Component {
   constructor(props) {
     super(props);
     this.state = store.getState();
+
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -15,30 +16,32 @@ export default class AddStudent extends Component {
     this.unsusbscribe = store.subscribe(() => {
       this.setState(store.getState())
     })
+     const fetchCampusesThunk = fetchCampuses();
+     store.dispatch(fetchCampusesThunk);
+  }
+
+  handleNameChange(event) {
+    let studentName = event.target.value;
+    store.dispatch(editStudentName(studentName))
+  }
+
+  handleEmailChange(event) {
+    let studentEmail = event.target.value;
+    store.dispatch(editStudentEmail(studentEmail))
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    //  console.log('inputName: ', event.target.querySelector('#inputName').value)
-    //  console.log('inputEmail: ', event.target.querySelector('#inputEmail').value)
-    //  console.log('inputCampus: ', event.target.querySelector('#inputCampus').value)
-     const name = event.target.querySelector('#inputName').value;
-     const email =  event.target.querySelector('#inputEmail').value;
-     const assignedCampus = event.target.querySelector('#inputCampus').value;
 
-    axios.post('/api/students/addstudent', {name, email, assignedCampus})
-    .then(res => res.data)
-    .then(student => {
-      const addStudentAction = addStudent(student)
-      store.dispatch(addStudentAction);
-    })
-    .catch(err => {
-      console.log(err)
-    })
+    const name = event.target.inputName.value;
+    const email =  event.target.inputEmail.value;
+    const assignedCampus = event.target.inputCampus.value;
 
-    event.target.querySelector('#inputName').value = '';
-    event.target.querySelector('#inputEmail').value = '';
-    event.target.querySelector('#inputCampus').value = '';
+    const createStudentThunk = createStudent(name, email, assignedCampus);
+    store.dispatch(createStudentThunk);
+
+    event.target.inputName.value = '';
+    event.target.inputEmail.value = '';
   }
 
   componentWillUnmount() {
@@ -46,30 +49,29 @@ export default class AddStudent extends Component {
   }
 
   render() {
+
+    const campuses = this.state.campuses;
+
     return (
       <form className="form-horizontal" onSubmit={this.handleSubmit}>
         <div className="form-group">
           <label className="col-sm-2 control-label">Student Name</label>
           <div className="col-sm-10">
-            <input className="form-control" id="inputName" placeholder="Student Name" />
+            <input className="form-control" name="inputName" placeholder="Student Name" onChange={this.handleNameChange} />
           </div>
         </div>
 
         <div className="form-group">
           <label htmlFor="inputEmail3" className="col-sm-2 control-label">Email</label>
           <div className="col-sm-10">
-            <input type="email" className="form-control" id="inputEmail" placeholder="Email" />
+            <input type="email" className="form-control" name="inputEmail" placeholder="Email" onChange={this.handleEmailChange} />
           </div>
         </div>
 
         <div className="form-group">
           <label className="col-sm-2 control-label">Assigned Campus</label>
-          <select name="" id="inputCampus">
-            <option value="Titan">Titan</option>
-            <option value="Luna">Luna</option>
-            <option value="Mars">Mars</option>
-            <option value="Terra">Terra</option>
-            <option value="Venus">Venus</option>
+          <select name="inputCampus" id="inputCampus">
+            {campuses.map(campus => <option value={`${campus.name}`} key={campus.id}>{campus.name}</option>)}
           </select>
         </div>
           <div className="form-group">
