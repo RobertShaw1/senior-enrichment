@@ -7,7 +7,7 @@ module.exports = router;
 
 // route = api/Campuses --> will get all campuses from the DB
 router.get('/', function(req, res, next) {
-  Campus.findAll()
+  Campus.findAll({order: [['name', 'ASC']]})
   .then(campuses => res.json(campuses))
   .catch(next);
 })
