@@ -1,8 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-const views = ['Home', 'Campuses', 'Students']
-
 export default function Nav() {
   return (
     <nav className="navbar navbar-default">
@@ -13,14 +11,17 @@ export default function Nav() {
       </NavLink>
       <div>
         <ul className="nav nav-pills">
-          {views.map(view => {
-            let path = view === 'Home' ? '/' : `/${view}`;
-            return (
-              <NavLink className="nav nav-pills" to={path}>
-                <li key={view}>{view}</li>
-              </NavLink>
-            )
-          })}
+          <NavLink className="nav nav-pills" to="/">
+            <li key="Home" className="navBarList"><span>Home</span></li>
+          </NavLink>
+          
+          <NavLink className="nav nav-pills" to="/Campuses">
+            <li key="Campuses" className="navBarList"><span>Campuses</span></li>
+          </NavLink>
+          
+          <NavLink className="nav nav-pills" to="/Students">
+            <li key="Students" className="navBarList"><span>Students</span></li>
+          </NavLink>
         </ul>
       </div>
     </nav>
