@@ -12,12 +12,15 @@ router.get('/', function(req, res, next) {
   .catch(next);
 })
 
-//GET A SINGLE CAMPUS BY ID
-.get('/:campusId', function(req, res, next) {
-  let campusId = req.params.campusId
-  Campus.findById(campusId)
+//GET A SINGLE CAMPUS BY NAME
+.get('/:campusName', function(req, res, next) {
+  let campusName = req.params.campusName;
+  Campus.findOne({where: {name: campusName}})
   .then(campus => {
-    res.json(campus)
+    return campus.getStudents();
+  })
+  .then(students => {
+    res.json(students)
   })
   .catch(next)
 })
