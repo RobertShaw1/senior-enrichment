@@ -4,6 +4,7 @@ import axios from 'axios';
 
 //ACTION TYPES
 const GET_ALL_STUDENTS = 'GET_ALL_STUDENTS';
+const GET_STUDENTS_BY_CAMPUS = 'GET_STUDENTS_BY_CAMPUS';
 const ADD_STUDENT = 'ADD_STUDENT';
 const DELETE_STUDENT = 'DELETE_STUDENT';
 const UPDATE_STUDENT = 'UPDATE_STUDENT';
@@ -23,7 +24,14 @@ const EDIT_CAMPUS_NAME = 'EDIT_CAMPUS_NAME';
 export const getStudents = function (students) {
 	return {
 	type: GET_ALL_STUDENTS,
-	students: students
+  students: students
+	};
+};
+
+export const getStudentsByCampus = function (selectedCampusStudents) {
+	return {
+	type: GET_STUDENTS_BY_CAMPUS,
+  selectedCampusStudents: selectedCampusStudents
 	};
 };
 
@@ -77,16 +85,25 @@ export const editCampusName = function (campusName) {
 };
 
 //THUNK CREATORS
-export const fetchStudents = function() {
+export const fetchStudents = function(campusName) {
 
   //THUNK
   return function thunk(dispatch, getState) {
-    axios.get('/api/students')
-    .then(res => res.data)
-    .then(students => {
-      const getStudentsAction = getStudents(students)
-      dispatch(getStudentsAction);
-    })
+    if(campusName) {
+      axios.get(`/api/campuses/${campusName}`)
+      .then(res => res.data)
+      .then(students => {
+        const getStudentsByCampusAction = getStudentsByCampus(students)
+        dispatch(getStudentsByCampusAction);
+      })
+    } else {
+      axios.get('/api/students')
+      .then(res => res.data)
+      .then(students => {
+        const getStudentsAction = getStudents(students)
+        dispatch(getStudentsAction);
+      })
+    }
   }
 }
 
@@ -163,6 +180,7 @@ const initialState = {
   campuses: [],
   campus: {},
   campusName: '',
+  selectedCampusStudents: [],
   student: {},
   deletedStudent: {},
   studentName: '',
@@ -180,6 +198,9 @@ const rootReducer = function(prevState = initialState, action) {
   switch(action.type) {
     case GET_ALL_STUDENTS:
       nextState.students = action.students
+      break
+    case GET_STUDENTS_BY_CAMPUS:
+      nextState.selectedCampusStudents = action.selectedCampusStudents
       break
     case GET_ALL_CAMPUSES:
       nextState.campuses = action.campuses
