@@ -17,8 +17,8 @@ const Student = db.define('student', {
   },
 })
 
-// Campus.hasMany(Student)
-Campus.belongsToMany(Student, {through: 'StudentCampus'})
+Campus.hasMany(Student)
+// Campus.belongsToMany(Student, {through: 'StudentCampus'})
 Student.belongsTo(Campus) //----> Adds 'campusId' to Student
 
 module.exports = Student;
