@@ -1,6 +1,6 @@
 //Node Modules
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
 //Local Modules
 
@@ -32,13 +32,15 @@ export default class Root extends Component {
       <Router>
         <div className="container">
           <Route path="/" component={Nav} />
-          <Route exact path="/" component={Home} />
-          <Route exact path="/Campuses" component={Campuses} />
-          <Route exact path="/Campuses/AddCampus" component={AddCampus} />
-          <Route exact path="/Campuses/:CampusName" component={SingleCampus} />
-          <Route exact path="/Students/AddStudent" component={AddStudent} />
-          <Route exact path="/Students/:StudentName" component={SingleStudent} />
-          <Route exact path="/Students/" component={Students} />
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/Campuses" component={Campuses} />
+            <Route exact path="/Campuses/AddCampus" component={AddCampus} />
+            <Route exact path="/Campuses/:CampusName" component={SingleCampus} />
+            <Route exact path="/Students/" component={Students} />
+            <Route exact path="/Students/AddStudent" component={AddStudent} />
+            <Route exact path="/Students/:StudentName" component={SingleStudent} />
+          </Switch>
         </div>
       </Router>
     )
