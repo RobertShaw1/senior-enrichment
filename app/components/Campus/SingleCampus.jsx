@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
-import { Button, Divider, Grid, Header, Image, List, Transition } from 'semantic-ui-react'
+import { Button, Container, Divider, Grid, Header, Icon, Image, List, Transition } from 'semantic-ui-react'
 import faker from 'faker';
 
 //Local Modules
@@ -91,28 +91,34 @@ class SingleCampus extends Component {
           </form>
         </Transition>
         <Divider />
-        <List divided verticalAlign='middle'>
-          {selectedCampusStudents.map(student => {
-            let path = `/students/${student.name}`
-            return (
-              <List.Item key={student.id}>
-                <List.Content floated='right'>
-                  <Button basic color='red' size='small' onClick={this.props.deleteStudent}name={student.name}>Delete Student
-                    </Button>
-                </List.Content>
-                <Image avatar src={faker.image.avatar()} />
-                <List.Content>
-                  <Link to={`${path}`}>
-                    <h4>
-                      {student.name}
-                    </h4>
-                  </Link>
-                    <span>{student.email}</span>
-                </List.Content>
-              </List.Item>
-            )
-          })}
-        </List>
+        { selectedCampusStudents.length ? 
+          <List divided verticalAlign='middle'>
+            {selectedCampusStudents.map(student => {
+              let path = `/students/${student.name}`
+              return (
+                <List.Item key={student.id}>
+                  <List.Content floated='right'>
+                    <Button basic color='red' size='small' onClick={this.props.deleteStudent}name={student.name}>Delete Student
+                      </Button>
+                  </List.Content>
+                  <Image avatar src={faker.image.avatar()} />
+                  <List.Content>
+                    <Link to={`${path}`}>
+                      <h4>
+                        {student.name}
+                      </h4>
+                    </Link>
+                      <span>{student.email}</span>
+                  </List.Content>
+                </List.Item>
+              )
+            })}
+          </List> :
+          <Container>
+            <Header as='h3' color="grey" textAlign='center'>There are no students assigned to this campus.</Header>
+            <Header as='h4' color="grey" textAlign='center'>Feel free to a few <Icon name="smile" /></Header>
+          </Container>
+        }
         <Button className='deleteCampus' color='red' fluid onClick={this.props.handleDelete}>Delete Campus</Button>
       </div>
     )
