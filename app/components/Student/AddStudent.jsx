@@ -1,59 +1,38 @@
 import React, { Component } from 'react';
-import store from '../../store';
-import {createStudent, editStudentName, editStudentEmail, fetchCampuses} from '../../reducers'
+import {connect} from 'react-redux';
+import {createStudent} from '../../reducers'
 
-export default class AddStudent extends Component {
+class AddStudent extends Component {
   constructor(props) {
     super(props);
-    this.state = store.getState();
+
+    this.state = {
+      studentName: '',
+      studentEmail: '',
+    }
 
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  componentDidMount() {
-    this.unsusbscribe = store.subscribe(() => {
-      this.setState(store.getState())
-    })
-     const fetchCampusesThunk = fetchCampuses();
-     store.dispatch(fetchCampusesThunk);
   }
 
   handleNameChange(event) {
-    let studentName = event.target.value;
-    store.dispatch(editStudentName(studentName))
+    this.setState({
+      studentName: event.target.value
+    })
   }
 
   handleEmailChange(event) {
-    let studentEmail = event.target.value;
-    store.dispatch(editStudentEmail(studentEmail))
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-
-    const name = event.target.inputName.value;
-    const email =  event.target.inputEmail.value;
-    const assignedCampus = event.target.inputCampus.value;
-
-    const createStudentThunk = createStudent(name, email, assignedCampus);
-    store.dispatch(createStudentThunk);
-
-    event.target.inputName.value = '';
-    event.target.inputEmail.value = '';
-  }
-
-  componentWillUnmount() {
-    this.unsusbscribe();
+    this.setState({
+      studentEmail: event.target.value
+    })
   }
 
   render() {
 
-    const campuses = this.state.campuses;
+    const campuses = this.props.campuses;
 
     return (
-      <form className="form-horizontal" onSubmit={this.handleSubmit}>
+      <form className="form-horizontal" onSubmit={this.props.handleSubmit}>
         <div className="form-group">
           <label className="col-sm-2 control-label">Student Name</label>
           <div className="col-sm-10">
@@ -83,3 +62,32 @@ export default class AddStudent extends Component {
     )
   }
 }
+
+const mapStateToProps = function(state) {
+  return {
+    campuses: state.campuses
+  }
+}
+
+const mapDispatchToProps = function(dispatch) {
+  return {
+    handleSubmit: (event) => {
+      event.preventDefault();
+  
+      const name = event.target.inputName.value;
+      const email =  event.target.inputEmail.value;
+      const assignedCampus = event.target.inputCampus.value;
+  
+      const createStudentThunk = createStudent(name, email, assignedCampus);
+      dispatch(createStudentThunk);
+  
+      event.target.inputName.value = '';
+      event.target.inputEmail.value = '';
+    }
+  }
+}
+
+const AddStudentContainer = connect(mapStateToProps, mapDispatchToProps)(AddStudent)
+
+export default AddStudentContainer;
+
