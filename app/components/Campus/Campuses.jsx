@@ -19,6 +19,7 @@ function Campuses(props) {
         {campuses.map(campus => {
           let path = `/Campuses/${campus.name}`
           let campusImg = campus.image ? campus.image : faker.image.city();
+          let campusStudents = props.students.filter(student => student.campusName === campus.name).length;
           return (
             <Card key={campus.id}>
               <Link to={`${path}`}>
@@ -42,7 +43,7 @@ function Campuses(props) {
               <Card.Content extra>
                 <a className='ui floated-right'>
                   <Icon name='user' />
-                  22 Students
+                  {campusStudents ? campusStudents : 'No '} Students
                 </a>
                 <Button size='mini' floated='right' color='blue'>
                   Update Campus Info
@@ -59,6 +60,7 @@ function Campuses(props) {
 const mapStateToProps = function(state) {
   return {
     campuses: state.campuses,
+    students: state.students,
   }
 }
 
