@@ -18,6 +18,10 @@ body {
   border-radius: 5%;
 }
 
+.ui.red.fluid.button.deleteCampus {
+  margin-top: 70px;
+}
+
 .home-title {
   margin: 20px;
   display: flex;

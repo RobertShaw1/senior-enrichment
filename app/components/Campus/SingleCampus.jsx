@@ -38,6 +38,7 @@ function SingleCampus(props) {
           )
         })}
       </List>
+      <Button className='deleteCampus' color='red' fluid>Delete Campus</Button>
     </div>
   )
 }
