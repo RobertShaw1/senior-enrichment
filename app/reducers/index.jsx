@@ -13,31 +13,12 @@ const ADD_CAMPUS = 'ADD_CAMPUS';
 const DELETE_CAMPUS = 'DELETE_CAMPUS';
 const UPDATE_CAMPUS = 'UPDATE_CAMPUS';
 
-const EDIT_STUDENT_NAME = 'EDIT_STUDENT_NAME';
-const EDIT_STUDENT_EMAIL = 'EDIT_STUDENT_EMAIL';
-
-const EDIT_CAMPUS_NAME = 'EDIT_CAMPUS_NAME';
-
 
 //ACTION CREATORS
 export const getStudents = function (students) {
 	return {
 	type: GET_ALL_STUDENTS,
   students: students
-	};
-};
-
-export const editStudentName = function (studentName) {
-	return {
-	type: EDIT_STUDENT_NAME,
-	studentName
-	};
-};
-
-export const editStudentEmail = function (studentEmail) {
-	return {
-	type: EDIT_STUDENT_EMAIL,
-	studentEmail
 	};
 };
 
@@ -69,12 +50,6 @@ export const addCampus = function (campus) {
 	};
 };
 
-export const editCampusName = function (campusName) {
-	return {
-	type: EDIT_CAMPUS_NAME,
-	campusName
-	};
-};
 
 //THUNK CREATORS
 export const fetchStudents = function() {
@@ -162,11 +137,8 @@ const initialState = {
   students: [],
   campuses: [],
   campus: {},
-  campusName: '',
   student: {},
   deletedStudent: {},
-  studentName: '',
-  studentEmail: '',
 };
 
 
@@ -186,15 +158,6 @@ const rootReducer = function(prevState = initialState, action) {
       break
     case ADD_CAMPUS:
       nextState.campuses = nextState.campuses.concat(action.campus)
-      break
-    case EDIT_CAMPUS_NAME:
-      nextState.campusName = action.campusName
-      break
-    case EDIT_STUDENT_NAME:
-      nextState.studentName = action.studentName
-      break
-    case EDIT_STUDENT_EMAIL:
-      nextState.studentEmail = action.studentEmail
       break
     case ADD_STUDENT:
       nextState.students = nextState.students.concat(action.student)
