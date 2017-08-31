@@ -72,3 +72,8 @@ span .studentName {
 .addStudent {
   margin: 10px 10px 10px 10px;
 }
+
+.addStudentByCampus {
+  margin: 30px 250px 45px 250px;
+  padding: 0px 100px
+}
