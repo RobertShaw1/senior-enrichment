@@ -17,6 +17,7 @@ import SingleCampus from './Campus/SingleCampus';
 import AddStudent from './Student/AddStudent';
 import Students from './Student/Students';
 import SingleStudent from './Student/SingleStudent';
+import NoMatch from './NoMatch';
 
 export default class Root extends Component {
 
@@ -40,6 +41,7 @@ export default class Root extends Component {
             <Route exact path="/Students/" component={Students} />
             <Route exact path="/Students/AddStudent" component={AddStudent} />
             <Route exact path="/Students/:StudentName" component={SingleStudent} />
+            <Route component={NoMatch} />
           </Switch>
         </div>
       </Router>

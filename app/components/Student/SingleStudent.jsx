@@ -48,9 +48,7 @@ class SingleStudent extends Component {
   // }
   
   render() {
-    let selectedStudent = this.props.students.filter(student => student.name === this.props.match.params.StudentName)
-    console.log('selectedStudent = ', selectedStudent)
-
+    console.log('this.props = ', this.props)
     return (
       <div>
         <Menu tabular>
@@ -62,23 +60,23 @@ class SingleStudent extends Component {
           <Container>
             <Segment vertical>
                 <Header as='h5'>Name</Header>
-                <p>{selectedStudent[0].name}</p>
+                <p>{this.state.selectedStudent[0].name}</p>
             </Segment>
             <Segment vertical>
                 <Header as='h5'>Email</Header>
-                <p>{selectedStudent[0].email}</p>
+                <p>{this.state.selectedStudent[0].email}</p>
             </Segment>
             <Segment vertical>
                 <Header as='h5'>Assigned Campus</Header>
-                <Link to={`/campuses/${selectedStudent[0].campusName}`}>
-                  <p>{selectedStudent[0].campusName}</p>
+                <Link to={`/campuses/${this.state.selectedStudent[0].campusName}`}>
+                  <p>{this.state.selectedStudent[0].campusName}</p>
                 </Link>
             </Segment>
           </Container>
         </Transition>
 
         <Transition visible={this.state.activeItem === 'Edit'} animation='scale' duration={10}>
-          <Form onSubmit={this.handleSubmit}>
+          <Form onSubmit={this.props.handleSubmit}>
             <Form.Group>
             <Container>
               <Segment vertical>
@@ -99,9 +97,7 @@ class SingleStudent extends Component {
                     })}
                   </select>
               </Segment>
-              <Segment vertical>
-                <Form.Button content='Submit' />
-              </Segment>
+              <Form.Button content='Submit' />
             </Container>
             </Form.Group>
           </Form>
@@ -127,6 +123,12 @@ const mapDispatchToProps = function(dispatch) {
       dispatch(destroyStudentThunk);
       alert(`The Student ${studentName} was deleted!`)
     },
+    handleSumbit: event => {
+      event.preventDefault();
+      const {selectedStudentName, selectedStudentEmail} = this.state;
+      console.log('selectedStudentName = ', selectedStudentName)
+      console.log('event = ', event)
+    }
   }
 }
 
