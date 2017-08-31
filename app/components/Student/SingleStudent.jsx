@@ -1,6 +1,7 @@
 //Node Modules
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
 import { Menu, Segment, Header, Container, Transition, Form } from 'semantic-ui-react'
 
 //Local Modules
@@ -69,7 +70,9 @@ class SingleStudent extends Component {
             </Segment>
             <Segment vertical>
                 <Header as='h5'>Assigned Campus</Header>
-                <p>{selectedStudent[0].campusName}</p>
+                <Link to={`/campuses/${selectedStudent[0].campusName}`}>
+                  <p>{selectedStudent[0].campusName}</p>
+                </Link>
             </Segment>
           </Container>
         </Transition>
