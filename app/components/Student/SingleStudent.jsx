@@ -13,9 +13,6 @@ class SingleStudent extends Component {
     super(props);
     this.state = {
       activeItem: 'Profile',
-      selectedStudent: this.props.students.filter(student => student.name === this.props.match.params.StudentName),
-      selectedStudentName: this.props.students.filter(student => student.name === this.props.match.params.StudentName)[0].name,
-      selectedStudentEmail: this.props.students.filter(student => student.name === this.props.match.params.StudentName)[0].email,
     }
 
     this.handleItemClick = this.handleItemClick.bind(this);
@@ -30,15 +27,15 @@ class SingleStudent extends Component {
     })
   }
 
-  handleNameChange(e, {name}) {
+  handleNameChange(event) {
     this.setState({
-      selectedStudentName: name
+      selectedStudentName: event.target.value
     })
   }
 
-  handleEmailChange(e, {email}) {
+  handleEmailChange(event) {
     this.setState({
-      selectedStudentEmail: email
+      selectedStudentEmail: event.target.value
     })
   }
 
@@ -48,7 +45,9 @@ class SingleStudent extends Component {
   // }
   
   render() {
-    console.log('this.props = ', this.props)
+    let formName = this.state.selectedStudentName ? this.state.selectedStudentName : this.props.selectedStudentName;
+    let formEmail = this.state.selectedStudentEmail ? this.state.selectedStudentEmail : this.props.selectedStudentEmail;
+    let unedited = this.state.selectedStudentName || this.state.selectedStudentEmail ? false : true;
     return (
       <div>
         <Menu tabular>
@@ -60,16 +59,16 @@ class SingleStudent extends Component {
           <Container>
             <Segment vertical>
                 <Header as='h5'>Name</Header>
-                <p>{this.state.selectedStudent[0].name}</p>
+                <p>{this.props.selectedStudent[0].name}</p>
             </Segment>
             <Segment vertical>
                 <Header as='h5'>Email</Header>
-                <p>{this.state.selectedStudent[0].email}</p>
+                <p>{this.props.selectedStudent[0].email}</p>
             </Segment>
             <Segment vertical>
                 <Header as='h5'>Assigned Campus</Header>
-                <Link to={`/campuses/${this.state.selectedStudent[0].campusName}`}>
-                  <p>{this.state.selectedStudent[0].campusName}</p>
+                <Link to={`/campuses/${this.props.selectedStudent[0].campusName}`}>
+                  <p>{this.props.selectedStudent[0].campusName}</p>
                 </Link>
             </Segment>
           </Container>
@@ -80,24 +79,22 @@ class SingleStudent extends Component {
             <Form.Group>
             <Container>
               <Segment vertical>
-                <Header as='h5'>Name</Header>
-                <Form.Input placeholder='Name' value={this.state.selectedStudentName} onChange={this.handleNameChange} />   
+                <Form.Input label='Name' placeholder='Name' value={formName} onChange={this.handleNameChange} />
               </Segment>
               <Segment vertical>
-                <Header as='h5'>Email</Header>
-                <Form.Input placeholder='Email' value={this.state.selectedStudentEmail} onChange={this.handleEmailChange} />
+                <Form.Input label='Email' placeholder='Email' value={formEmail} onChange={this.handleEmailChange} />
               </Segment>
               <Segment vertical>
                   <Header as='h5'>Assigned Campus</Header>
                   <select name="inputCampus" id="inputCampus">
                     {this.props.campuses.map(campus => {
-                      return campus.name === this.state.selectedStudent[0].campusName ?
+                      return campus.name === this.props.selectedStudent[0].campusName ?
                       <option value={`${campus.name}`} key={campus.id} selected>{campus.name}</option> :
                       <option value={`${campus.name}`} key={campus.id}>{campus.name}</option>
                     })}
                   </select>
               </Segment>
-              <Form.Button content='Submit' />
+              <Form.Button disabled={unedited} content='Submit' onClick={this.props.handleSubmit} />
             </Container>
             </Form.Group>
           </Form>
@@ -107,10 +104,12 @@ class SingleStudent extends Component {
   }
 }
 
-const mapStateToProps = function(state) {
+const mapStateToProps = function(state, ownProps) {
   return {
-    students: state.students,
     campuses: state.campuses,
+    selectedStudent: state.students.filter(student => student.name === ownProps.match.params.StudentName),
+    selectedStudentName: state.students.filter(student => student.name === ownProps.match.params.StudentName)[0].name,
+    selectedStudentEmail: state.students.filter(student => student.name === ownProps.match.params.StudentName)[0].email,
   }
 }
 
@@ -125,7 +124,7 @@ const mapDispatchToProps = function(dispatch) {
     },
     handleSumbit: event => {
       event.preventDefault();
-      const {selectedStudentName, selectedStudentEmail} = this.state;
+      const {selectedStudentName, selectedStudentEmail} = this.props;
       console.log('selectedStudentName = ', selectedStudentName)
       console.log('event = ', event)
     }

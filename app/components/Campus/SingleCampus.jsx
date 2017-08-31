@@ -2,11 +2,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
-import { Button, Grid, Image, List, Transition } from 'semantic-ui-react'
+import { Button, Divider, Grid, Header, Image, List, Transition } from 'semantic-ui-react'
 import faker from 'faker';
 
 //Local Modules
-import {createStudent, destroyStudent, fetchStudents, fetchCampuses} from '../../reducers';
+import {createStudent, destroyStudent} from '../../reducers';
 
 
 class SingleCampus extends Component {
@@ -14,14 +14,20 @@ class SingleCampus extends Component {
     super(props);
     this.state = {
       visible: false,
-      campusName: this.props.match.params.CampusName,
-      selectedCampusStudents: this.props.students.filter(student => student.campusName === this.props.match.params.CampusName),
+      // selectedCampusStudents: this.props.students.filter(student => student.campusName === this.props.match.params.CampusName),
     }
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.showForm = this.showForm.bind(this);
   }
   
+
+  // componentWillReceiveProps(nextProps) {
+  //   this.setState({
+  //     selectedCampusStudents: nextProps.students.filter(student => student.campusName === nextProps.match.params.CampusName),
+  //   })
+  // }
+
   handleNameChange(event) {
     this.setState({
       studentName: event.target.value
@@ -41,8 +47,11 @@ class SingleCampus extends Component {
   }
 
   render() {
+    let selectedCampusStudents = this.props.students.filter(student => student.campusName === this.props.campusName)
+
     return(
       <div>
+        <Header as='h1' textAlign='center'>Welcome to the {this.props.campusName} campus!</Header>
         <Grid.Column width={8} className='addStudentByCampus'>
           <Button
             content={this.state.visible ? 'Finished Adding Students' : 'Add a Student'}
@@ -52,7 +61,7 @@ class SingleCampus extends Component {
             fluid
           />
         </Grid.Column>
-        <Transition visible={this.state.visible} animation='drop' duration={600}>
+        <Transition visible={this.state.visible} animation='drop' duration={500}>
           <form className="form-horizontal" onSubmit={this.props.handleSubmit}>
             <div className="form-group">
               <label className="col-sm-2 control-label">Student Name</label>
@@ -71,7 +80,7 @@ class SingleCampus extends Component {
             <div className="form-group">
               <label className="col-sm-2 control-label">Assigned Campus</label>
               <select name="inputCampus" id="inputCampus">
-                <option value={`${this.props.match.params.CampusName}`}>{this.props.match.params.CampusName}</option>)
+                <option value={`${this.props.campusName}`}>{this.props.campusName}</option>)
               </select>
             </div>
               <div className="form-group">
@@ -81,14 +90,14 @@ class SingleCampus extends Component {
               </div>
           </form>
         </Transition>
-        <h1> Hit the single campus route for {this.state.campusName}! </h1>
+        <Divider />
         <List divided verticalAlign='middle'>
-          {this.state.selectedCampusStudents.map(student => {
+          {selectedCampusStudents.map(student => {
             let path = `/students/${student.name}`
             return (
               <List.Item key={student.id}>
                 <List.Content floated='right'>
-                  <Button color='red' size='small' onClick={this.props.deleteStudent}name={student.name}>Delete Student
+                  <Button basic color='red' size='small' onClick={this.props.deleteStudent}name={student.name}>Delete Student
                     </Button>
                 </List.Content>
                 <Image avatar src={faker.image.avatar()} />
@@ -104,15 +113,16 @@ class SingleCampus extends Component {
             )
           })}
         </List>
-        <Button className='deleteCampus' color='red' fluid>Delete Campus</Button>
+        <Button className='deleteCampus' color='red' fluid onClick={this.props.handleDelete}>Delete Campus</Button>
       </div>
     )
   }
 }
 
-const mapStateToProps = function(state) {
+const mapStateToProps = function(state, ownProps) {
   return {
     students: state.students,
+    campusName: ownProps.match.params.CampusName,
   }
 }
 
@@ -125,7 +135,7 @@ const mapDispatchToProps = function(dispatch) {
       dispatch(destroyStudentThunk);
       alert(`The Student ${studentName} was deleted!`)
     },
-    handleSubmit: (event) => {
+    handleSubmit: event => {
       event.preventDefault();
   
       const name = event.target.inputName.value;
@@ -138,6 +148,10 @@ const mapDispatchToProps = function(dispatch) {
       event.target.inputName.value = '';
       event.target.inputEmail.value = '';
     },
+    handleDelete: event => {
+      event.preventDefault();
+      console.log('hit the delete button!')
+    }
   }
 }
 

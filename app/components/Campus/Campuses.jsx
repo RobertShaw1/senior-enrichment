@@ -7,7 +7,7 @@ import faker from 'faker';
 
 
 function Campuses(props) {
-  const {campuses} = props;
+  const {campuses, students} = props;
 
   return (
     <div>
@@ -19,7 +19,7 @@ function Campuses(props) {
         {campuses.map(campus => {
           let path = `/Campuses/${campus.name}`
           let campusImg = campus.image ? campus.image : faker.image.city();
-          let campusStudents = props.students.filter(student => student.campusName === campus.name).length;
+          let campusStudents = students.filter(student => student.campusName === campus.name).length;
           return (
             <Card key={campus.id}>
               <Link to={`${path}`}>
