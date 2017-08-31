@@ -1,6 +1,6 @@
 'use strict';
 const Sequelize = require('sequelize');
-const db =  require('../index');
+const db =  require('../db');
 const Campus =  require('./campus');
 
 const Student = db.define('student', {
@@ -18,7 +18,6 @@ const Student = db.define('student', {
 })
 
 Campus.hasMany(Student)
-// Campus.belongsToMany(Student, {through: 'StudentCampus'})
 Student.belongsTo(Campus) //----> Adds 'campusId' to Student
 
 module.exports = Student;
