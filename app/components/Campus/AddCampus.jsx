@@ -1,50 +1,27 @@
 import React, { Component } from 'react';
-import store from '../../store';
-import {createCampus, editCampusName} from '../../reducers'
+import {connect} from 'react-redux';
+import {createCampus} from '../../reducers'
 
-export default class AddCampus extends Component {
+class AddCampus extends Component {
   constructor(props) {
     super(props);
-    this.state = store.getState();
+    this.state = {
+      campusName: '',
+    }
 
     this.handleNameChange = this.handleNameChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  componentDidMount() {
-    this.unsusbscribe = store.subscribe(() => {
-      this.setState(store.getState())
-    })
   }
 
   handleNameChange(event) {
-    let campusName = event.target.value;
-    store.dispatch(editCampusName(campusName))
+    this.setState({
+      campusName: event.target.value
+    })
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-
-    const name = event.target.inputCampusName.value;
-    const image = event.target.inputCampusImage.value;
-
-    const createCampusThunk = createCampus(name, image);
-    store.dispatch(createCampusThunk);
-
-    event.target.inputCampusName.value = '';
-    event.target.inputCampusImage.value = '';
-  }
-
-  componentWillUnmount() {
-    this.unsusbscribe();
-  }
 
   render() {
-    // const campuses = this.state.campuses;
-    // ---> can also be expressed as const {campuses} = this.state
-
     return (
-      <form className="form-horizontal" onSubmit={this.handleSubmit}>
+      <form className="form-horizontal" onSubmit={this.props.handleSubmit}>
         <div className="form-group">
           <label className="col-sm-2 control-label">Campus Name</label>
           <div className="col-sm-10">
@@ -66,3 +43,26 @@ export default class AddCampus extends Component {
     )
   }
 }
+
+
+const mapStateToProps = null;
+
+const mapDispatchToProps = function(dispatch) {
+  return {
+    handleSubmit: event => {
+      event.preventDefault();
+  
+      const name = event.target.inputCampusName.value;
+      const image = event.target.inputCampusImage.value;
+  
+      const createCampusThunk = createCampus(name, image);
+      dispatch(createCampusThunk);
+  
+      event.target.inputCampusName.value = '';
+      event.target.inputCampusImage.value = '';
+    }
+  }
+}
+
+const AddCampusContainer = connect(mapStateToProps, mapDispatchToProps)(AddCampus)
+export default AddCampusContainer;
