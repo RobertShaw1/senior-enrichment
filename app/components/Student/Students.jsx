@@ -19,7 +19,7 @@ function Students(props) {
       <h3>STUDENTS</h3>
       <Card.Group >
         {students.map(student => {
-          let path = `/students/${student.name}`
+          let path = `/students/${student.id}`
           let studentCampus = student.campusName ? student.campusName : '';
           return (
             <Card key={`${student.name}`} id={`${student.name}`}>
