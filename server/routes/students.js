@@ -14,11 +14,6 @@ router.get('/', function(req, res, next) {
   .catch(next);
 })
 
-//GET A SINGLE STUDENT BY ID
-.get('/:studentId', function(req, res, next) {
-  res.send('You hit the route for a single student!')
-})
-
 //CREATE A STUDENT PROFILE
 //1. Find the campus - use req.body
 //2. Create the student
@@ -42,7 +37,14 @@ router.get('/', function(req, res, next) {
 
 //UPDATE A STUDENT PROFILE
 .put('/:studentId', function(req, res, next) {
-  res.send('Updated a student profile!')
+  delete req.body.id;
+  let changes = req.body;
+
+  Student.findById(req.params.studentId)
+  .then(student => student.update(changes))
+  .then(() => Student.findAll())
+  .then(students => res.json(students))
+  .catch(next)
 })
 
 //DELETE A STUDENT PROFILE

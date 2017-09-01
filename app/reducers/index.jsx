@@ -24,29 +24,36 @@ export const getStudents = function (students) {
 
 export const addStudent = function (student) {
 	return {
-	type: ADD_STUDENT,
-	student: student
+    type: ADD_STUDENT,
+    student: student
 	};
+};
+
+export const updateStudent = function (students) {
+	return {
+    type: UPDATE_STUDENT,
+    students: students
+  };
 };
 
 export const deleteStudent = function (deletedStudent) {
 	return {
-	type: DELETE_STUDENT,
-	deletedStudent: deletedStudent
+    type: DELETE_STUDENT,
+    deletedStudent: deletedStudent
 	};
 };
 
 export const getCampuses = function (campuses) {
 	return {
-	type: GET_ALL_CAMPUSES,
-	campuses: campuses
+    type: GET_ALL_CAMPUSES,
+    campuses: campuses
 	};
 };
 
 export const addCampus = function (campus) {
 	return {
-	type: ADD_CAMPUS,
-	campus: campus
+    type: ADD_CAMPUS,
+    campus: campus
 	};
 };
 
@@ -77,6 +84,20 @@ export const fetchCampuses = function() {
     })
   }
 }
+
+export const changeStudent = function(student) {
+  console.log('STUDENT = ', student)
+    //THUNK
+    return function thunk(dispatch, getState) {
+      axios.put(`/api/students/${student.id}`, student)
+      .then(res => res.data)
+      .then(students => {
+        const updateStudentAction = updateStudent(students)
+        dispatch(updateStudentAction);
+      })
+    }
+  }
+  
 
 export const createCampus = function(name, image) {
 
@@ -151,6 +172,9 @@ const rootReducer = function(prevState = initialState, action) {
 
   switch(action.type) {
     case GET_ALL_STUDENTS:
+      nextState.students = action.students
+      break
+    case UPDATE_STUDENT:
       nextState.students = action.students
       break
     case GET_ALL_CAMPUSES:

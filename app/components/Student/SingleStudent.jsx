@@ -5,14 +5,14 @@ import {Link} from 'react-router-dom';
 import { Menu, Segment, Header, Container, Transition, Form } from 'semantic-ui-react'
 
 //Local Modules
-import {deleteStudent} from '../../reducers'
+import {changeStudent} from '../../reducers'
 
 
 class SingleStudent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeItem: 'Profile',
+      activeItem: 'Edit',
     }
 
     this.handleItemClick = this.handleItemClick.bind(this);
@@ -22,8 +22,9 @@ class SingleStudent extends Component {
   }
 
   handleItemClick(e, {name}) {
+    
     this.setState({
-      activeItem: name
+      activeItem: name === 'Profile' || name === 'Edit' ? name : 'Profile'
     })
   }
 
@@ -75,10 +76,10 @@ class SingleStudent extends Component {
             <Form.Group>
             <Container>
               <Segment vertical>
-                <Form.Input label='Name' placeholder='Name' value={formName} onChange={this.handleNameChange} />
+                <Form.Input name='inputName' label='Name' placeholder='Name' value={formName} onChange={this.handleNameChange} />
               </Segment>
               <Segment vertical>
-                <Form.Input label='Email' placeholder='Email' value={formEmail} onChange={this.handleEmailChange} />
+                <Form.Input name='inputEmail' label='Email' placeholder='Email' value={formEmail} onChange={this.handleEmailChange} />
               </Segment>
               <Segment vertical>
                   <Header as='h5'>Assigned Campus</Header>
@@ -90,7 +91,7 @@ class SingleStudent extends Component {
                     })}
                   </select>
               </Segment>
-              <Form.Button disabled={unedited} content='Submit' onClick={() => this.props.handleSubmit(this.state.selectedStudentName, this.state.selectedStudentEmail)} />
+              <Form.Button disabled={unedited} content='Submit' name='button' value={this.props.match.params.studentid} onClick={this.handleItemClick} />
             </Container>
             </Form.Group>
           </Form>
@@ -116,9 +117,15 @@ const mapDispatchToProps = function(dispatch) {
       dispatch(destroyStudentThunk);
       alert(`The Student ${studentName} was deleted!`)
     },
-    handleSubmit: (selectedStudentName, selectedStudentEmail) => {
-      console.log('selectedStudentName = ', selectedStudentName)
-      console.log('selectedStudentEmail = ', selectedStudentEmail)
+    handleSubmit: (event) => {
+      let id = Number.parseInt(event.target.button.value);
+      let name = event.target.inputName.value;
+      let email = event.target.inputEmail.value;
+      let campusName = event.target.inputCampus.value;
+
+      const changeStudentThunk = changeStudent({id, name, email, campusName})
+      dispatch(changeStudentThunk)
+      alert(`Update Successful!`)
     }
   }
 }
