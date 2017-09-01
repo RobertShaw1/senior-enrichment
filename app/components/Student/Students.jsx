@@ -37,7 +37,7 @@ function Students(props) {
                   <Link to={`${path}`}>
                     <Button basic color='green'>Update Student</Button>
                   </Link>
-                  <Button basic color='red' onClick={props.deleteStudent}name={student.name}>Delete Student
+                  <Button basic color='red' onClick={e => props.deleteStudent(e, student)}name={student.id}>Delete Student
                   </Button>
                 </div>
               </Card.Content>
@@ -58,14 +58,12 @@ const mapStateToProps = function(state) {
 const mapDispatchToProps = function(dispatch) {
   return {
      
-    deleteStudent: event => {
+    deleteStudent: (event, student) => {
       event.preventDefault();
-      // console.log('event.target = ', event.target)
-      const studentName = event.target.name;
     
-      const destroyStudentThunk = destroyStudent(studentName);
+      const destroyStudentThunk = destroyStudent(student.id);
       dispatch(destroyStudentThunk);
-      alert(`The Student ${studentName} was deleted!`)
+      alert(`The Student ${student.name} was deleted!`)
     }
   };
 }

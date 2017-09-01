@@ -98,7 +98,7 @@ class SingleCampus extends Component {
               return (
                 <List.Item key={student.id}>
                   <List.Content floated='right'>
-                    <Button basic color='red' size='small' onClick={this.props.deleteStudent}name={student.name}>Delete Student
+                    <Button basic color='red' size='small' onClick={e => this.props.deleteStudent(e, student)}name={student}>Delete Student
                       </Button>
                   </List.Content>
                   <Image avatar src={faker.image.avatar()} />
@@ -134,12 +134,12 @@ const mapStateToProps = function(state, ownProps) {
 
 const mapDispatchToProps = function(dispatch) {
   return {
-    deleteStudent: event => {
+    deleteStudent: (event, student) => {
       event.preventDefault();
-      const studentName = event.target.name;
-      const destroyStudentThunk = destroyStudent(studentName);
+    
+      const destroyStudentThunk = destroyStudent(student.id);
       dispatch(destroyStudentThunk);
-      alert(`The Student ${studentName} was deleted!`)
+      alert(`The Student ${student.name} was deleted!`)
     },
     handleSubmit: event => {
       event.preventDefault();

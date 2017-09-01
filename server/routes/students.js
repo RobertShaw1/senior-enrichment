@@ -46,10 +46,10 @@ router.get('/', function(req, res, next) {
 })
 
 //DELETE A STUDENT PROFILE
-.delete('/:studentName', function(req, res, next) {
-  let name = req.params.studentName;
+.delete('/:studentId', function(req, res, next) {
+  let id = req.params.studentId;
 
-  Student.findOne({where: {name}})
+  Student.findById(id)
   .then(student => {
     let deletedStudent = student.dataValues;
     student.destroy();

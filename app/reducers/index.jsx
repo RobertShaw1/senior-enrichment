@@ -110,11 +110,11 @@ export const createStudent = function(name, email, assignedCampus) {
   }
 }
 
-export const destroyStudent = function(studentName) {
+export const destroyStudent = function(studentId) {
   
   //THUNK
   return function thunk(dispatch, getState) {
-    axios.delete(`/api/students/${studentName}`)
+    axios.delete(`/api/students/${studentId}`)
     .then(res => res.data)
     .then(deletedStudent => {
       const deleteStudentAction = deleteStudent(deletedStudent)
