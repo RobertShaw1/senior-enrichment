@@ -38,16 +38,12 @@ class SingleStudent extends Component {
       selectedStudentEmail: event.target.value
     })
   }
-
-  // handleSumbit() {
-  //   const {selectedStudentName, selectedStudentEmail} = this.state;
-  //   console.log('selectedStudentName = ', selectedStudentName)
-  // }
   
   render() {
-    let formName = this.state.selectedStudentName ? this.state.selectedStudentName : this.props.selectedStudentName;
-    let formEmail = this.state.selectedStudentEmail ? this.state.selectedStudentEmail : this.props.selectedStudentEmail;
+    let formName = this.state.selectedStudentName ? this.state.selectedStudentName : this.props.selectedStudent.name;
+    let formEmail = this.state.selectedStudentEmail ? this.state.selectedStudentEmail : this.props.selectedStudent.email;
     let unedited = this.state.selectedStudentName || this.state.selectedStudentEmail ? false : true;
+
     return (
       <div>
         <Menu tabular>
@@ -59,16 +55,16 @@ class SingleStudent extends Component {
           <Container>
             <Segment vertical>
                 <Header as='h5'>Name</Header>
-                <p>{this.props.selectedStudent[0].name}</p>
+                <p>{this.props.selectedStudent.name}</p>
             </Segment>
             <Segment vertical>
                 <Header as='h5'>Email</Header>
-                <p>{this.props.selectedStudent[0].email}</p>
+                <p>{this.props.selectedStudent.email}</p>
             </Segment>
             <Segment vertical>
                 <Header as='h5'>Assigned Campus</Header>
-                <Link to={`/campuses/${this.props.selectedStudent[0].campusName}`}>
-                  <p>{this.props.selectedStudent[0].campusName}</p>
+                <Link to={`/campuses/${this.props.selectedStudent.campusName}`}>
+                  <p>{this.props.selectedStudent.campusName}</p>
                 </Link>
             </Segment>
           </Container>
@@ -88,13 +84,13 @@ class SingleStudent extends Component {
                   <Header as='h5'>Assigned Campus</Header>
                   <select name="inputCampus" id="inputCampus">
                     {this.props.campuses.map(campus => {
-                      return campus.name === this.props.selectedStudent[0].campusName ?
+                      return campus.name === this.props.selectedStudent.campusName ?
                       <option value={`${campus.name}`} key={campus.id} selected>{campus.name}</option> :
                       <option value={`${campus.name}`} key={campus.id}>{campus.name}</option>
                     })}
                   </select>
               </Segment>
-              <Form.Button disabled={unedited} content='Submit' onClick={this.props.handleSubmit} />
+              <Form.Button disabled={unedited} content='Submit' onClick={() => this.props.handleSubmit(this.state.selectedStudentName, this.state.selectedStudentEmail)} />
             </Container>
             </Form.Group>
           </Form>
@@ -107,9 +103,7 @@ class SingleStudent extends Component {
 const mapStateToProps = function(state, ownProps) {
   return {
     campuses: state.campuses,
-    selectedStudent: state.students.filter(student => student.name === ownProps.match.params.StudentName),
-    selectedStudentName: state.students.filter(student => student.name === ownProps.match.params.StudentName)[0].name,
-    selectedStudentEmail: state.students.filter(student => student.name === ownProps.match.params.StudentName)[0].email,
+    selectedStudent: state.students.filter(student => student.id == ownProps.match.params.studentid)[0],
   }
 }
 
@@ -122,11 +116,9 @@ const mapDispatchToProps = function(dispatch) {
       dispatch(destroyStudentThunk);
       alert(`The Student ${studentName} was deleted!`)
     },
-    handleSumbit: event => {
-      event.preventDefault();
-      const {selectedStudentName, selectedStudentEmail} = this.props;
+    handleSubmit: (selectedStudentName, selectedStudentEmail) => {
       console.log('selectedStudentName = ', selectedStudentName)
-      console.log('event = ', event)
+      console.log('selectedStudentEmail = ', selectedStudentEmail)
     }
   }
 }
