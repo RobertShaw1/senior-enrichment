@@ -1,6 +1,7 @@
 const db = require('./server/db/db');
 const Student = require('./server/db/models/student');
 const Campus = require('./server/db/models/campus');
+const Promise = require('bluebird');
 
 const campuses = [
   { name: 'Terra', image: '/images/Terra.jpeg' },

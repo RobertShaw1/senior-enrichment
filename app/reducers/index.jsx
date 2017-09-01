@@ -36,6 +36,13 @@ export const updateStudent = function (students) {
   };
 };
 
+export const updateCampus = function (campuses) {
+	return {
+    type: UPDATE_CAMPUS,
+    campuses: campuses
+  };
+};
+
 export const deleteStudent = function (deletedStudent) {
 	return {
     type: DELETE_STUDENT,
@@ -94,6 +101,20 @@ export const changeStudent = function(student) {
       .then(students => {
         const updateStudentAction = updateStudent(students)
         dispatch(updateStudentAction);
+      })
+    }
+  }
+
+export const changeCampus = function(oldCampusName, newCampusName) {
+  console.log('CAMPUS = ', newCampusName)
+
+    //THUNK
+    return function thunk(dispatch, getState) {
+      axios.put(`/api/campuses/${oldCampusName}`, {newCampusName})
+      .then(res => res.data)
+      .then(campuses => {
+        const updateCampusAction = updateCampus(campuses)
+        dispatch(updateCampusAction);
       })
     }
   }
@@ -176,6 +197,9 @@ const rootReducer = function(prevState = initialState, action) {
       break
     case UPDATE_STUDENT:
       nextState.students = action.students
+      break
+    case UPDATE_CAMPUS:
+      nextState.campuses = action.campuses
       break
     case GET_ALL_CAMPUSES:
       nextState.campuses = action.campuses

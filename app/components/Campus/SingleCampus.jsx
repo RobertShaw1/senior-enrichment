@@ -6,7 +6,7 @@ import { Button, Container, Divider, Form, Grid, Header, Icon, Image, List, Menu
 import faker from 'faker';
 
 //Local Modules
-import {createStudent, destroyStudent} from '../../reducers';
+import {createStudent, destroyStudent, changeCampus} from '../../reducers';
 
 
 class SingleCampus extends Component {
@@ -15,27 +15,33 @@ class SingleCampus extends Component {
     this.state = {
       visible: false,
       activeItem: 'Campus Info',
-      // selectedCampusStudents: this.props.students.filter(student => student.campusName === this.props.match.params.CampusName),
     }
 
+    this.handleTabClick = this.handleTabClick.bind(this);
     this.handleItemClick = this.handleItemClick.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.showForm = this.showForm.bind(this);
   }
-  
 
-  // componentWillReceiveProps(nextProps) {
-  //   this.setState({
-  //     selectedCampusStudents: nextProps.students.filter(student => student.campusName === nextProps.match.params.CampusName),
-  //   })
-  // }
-
-  handleItemClick(e, {name}) {
-    
+  handleTabClick(event, {name}) {
     this.setState({
       activeItem: name === 'Campus Info' || name === 'Edit' ? name : 'Campus Info'
     })
+  }
+
+  handleItemClick(event, {name}) {
+    event.preventDefault();
+    const newName = event.target.inputCampusName.value;
+    const oldCampusName = this.props.match.params.CampusName;
+    console.log('this.props = ', this.props)
+    this.props.changeCampus(oldCampusName, newName)    
+
+    this.setState({
+      activeItem: name === 'Campus Info' || name === 'Edit' ? name : 'Campus Info'
+    })
+
+    event.target.inputCampusName.value = '';    
   }
 
   handleNameChange(event) {
@@ -111,8 +117,8 @@ class SingleCampus extends Component {
         <Divider />
 
         <Menu tabular>
-          <Menu.Item name='Campus Info' value='test' active={this.state.activeItem === 'Campus Info'} onClick={this.handleItemClick} />
-          <Menu.Item name='Edit' active={this.state.activeItem === 'Edit'} onClick={this.handleItemClick} />
+          <Menu.Item name='Campus Info' value='test' active={this.state.activeItem === 'Campus Info'} onClick={this.handleTabClick} />
+          <Menu.Item name='Edit' active={this.state.activeItem === 'Edit'} onClick={this.handleTabClick} />
         </Menu>
 
         <Grid>
@@ -131,13 +137,13 @@ class SingleCampus extends Component {
           </Transition>
 
           <Transition visible={this.state.activeItem === 'Edit'} animation='scale' duration={10}>
-            <Form onSubmit={this.props.handleSubmit}>
+            <Form onSubmit={this.handleItemClick}>
               <Form.Group>
               <Container>
                 <Segment vertical>
                   <Form.Input name='inputCampusName' label='Campus Name' placeholder='Campus Name' value={formName} onChange={this.handleNameChange} />
                 </Segment>
-                <Form.Button disabled={unedited} content='Submit' name='button' value={this.props.match.params.studentid} onClick={this.handleItemClick} />
+                <Form.Button disabled={unedited} content='Submit' name='button' />
               </Container>
               </Form.Group>
             </Form>
@@ -200,15 +206,21 @@ const mapDispatchToProps = function(dispatch) {
     handleSubmit: event => {
       event.preventDefault();
   
-      const name = event.target.inputName.value;
+      const name = event.target.inputStudentName.value;
       const email =  event.target.inputEmail.value;
       const assignedCampus = event.target.inputCampus.value;
   
       const createStudentThunk = createStudent(name, email, assignedCampus);
       dispatch(createStudentThunk);
   
-      event.target.inputName.value = '';
+      event.target.inputStudentName.value = '';
       event.target.inputEmail.value = '';
+    },
+    changeCampus: (oldCampusName, newName) => {
+      const changeCampusThunk = changeCampus(oldCampusName, newName);
+      dispatch(changeCampusThunk);
+  
+      alert(`Update Successful!`)
     },
     handleDelete: event => {
       event.preventDefault();

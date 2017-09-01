@@ -47,7 +47,7 @@ function Campuses(props) {
                 </a>
                 <Link to={`${path}`}>
                   <Button size='mini' floated='right' color='blue'>
-                    Update Campus Info
+                    View Campus Info
                   </Button>
                 </Link>
               </Card.Content>

@@ -35,8 +35,23 @@ router.get('/', function(req, res, next) {
 })
 
 //UPDATE CAMPUS INFO
-.put('/:campusId', function(req, res, next) {
-  res.send('Updated campus info!')
+.put('/:campusName', function(req, res, next) {
+  
+  let newCampusName = req.body.newCampusName;
+  let oldCampusName = req.params.campusName;
+
+  Campus.findOne({where: {name: oldCampusName}})
+  // .then(campus => campus.dataValues)
+  .then(campus => {
+    console.log('campus = ', campus.name)
+    return campus.update({name: newCampusName})
+  })
+  .then(() => Campus.findAll())
+  .then(campuses => {
+    console.log('campuses = ', campuses)
+    res.json(campuses)
+  })
+  .catch(next)
 })
 
 //DELETE A CAMPUS

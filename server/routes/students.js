@@ -24,7 +24,8 @@ router.get('/', function(req, res, next) {
   let studentEmail = req.body.email;
   let studentName = req.body.name;
 
-  Campus.findOne({where: {name: `${campusName}`}})
+  Campus.findOne({where: {name: campusName}})
+  .then(assignedCampus => assignedCampus.dataValues)
   .then(assignedCampus => {
     //assignedCampus = campus instance from the database
     return Student.create({name: studentName, email: studentEmail, campusName: campusName, campusId: assignedCampus.id})
