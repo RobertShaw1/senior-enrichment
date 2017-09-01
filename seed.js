@@ -11,7 +11,7 @@ const campuses = [
   { name: 'Ekon', image: 'http://images.all-free-download.com/images/graphiclarge/beautiful_city_architectural_photography_6_165964.jpg' },
   { name: 'Cowboy Hall', image: 'https://us.123rf.com/450wm/macrovector/macrovector1512/macrovector151200648/49542835-cowboy-concept-with-man-on-horse-and-saloon-building-on-background-vector-illustration.jpg?ver=6' },
   { name: 'Mt. Classy', image: 'http://wallup.net/wp-content/uploads/2016/01/178549-Machu_Picchu-landscape-mountain-Chile-old_building-forest-748x421.jpg' },
-  { name: 'Detriot', image: 'http://detroiturbex.com/content/downtown/freep/img/3.jpg' },
+  { name: 'Detroit', image: 'http://detroiturbex.com/content/downtown/freep/img/3.jpg' },
   { name: 'Roosevelt', image: 'https://www.signmeup.com/images/clients/64188h_RU_stack_logo_green.gif' },
   { name: 'Mercury', image: 'https://apod.nasa.gov/apod/image/1303/PIA16853mercury.jpg' },
 ];

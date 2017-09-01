@@ -45,9 +45,11 @@ function Campuses(props) {
                   <Icon name='user' />
                   {campusStudents ? campusStudents : 'No '} Students
                 </a>
-                <Button size='mini' floated='right' color='blue'>
-                  Update Campus Info
-                </Button>
+                <Link to={`${path}`}>
+                  <Button size='mini' floated='right' color='blue'>
+                    Update Campus Info
+                  </Button>
+                </Link>
               </Card.Content>
             </Card>
           )
