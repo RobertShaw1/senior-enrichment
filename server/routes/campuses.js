@@ -13,19 +13,22 @@ router.get('/', function(req, res, next) {
 })
 
 //GET A SINGLE CAMPUS BY NAME
+// This should be based on id, not name
 .get('/:campusName', function(req, res, next) {
   let campusName = req.params.campusName;
   Campus.findOne({where: {name: campusName}})
   .then(campus => {
     return campus.getStudents();
   })
-  .then(students => {
+  .then(students => { // This is actually a campusWithStudents! The name threw me off
     res.json(students)
   })
   .catch(next)
 })
 
 //CREATE A CAMPUS
+//Just make it a post to the uri '/'
+// No need for addcampus
 .post('/addcampus', function(req, res, next) {
   Campus.create({name: req.body.name, image: req.body.image})
   .then(newCampus => {
@@ -35,8 +38,9 @@ router.get('/', function(req, res, next) {
 })
 
 //UPDATE CAMPUS INFO
+// This should be based on id, not name
 .put('/:campusName', function(req, res, next) {
-  
+
   let newCampusName = req.body.newCampusName;
   let oldCampusName = req.params.campusName;
 
@@ -49,6 +53,7 @@ router.get('/', function(req, res, next) {
   .then(() => Campus.findAll())
   .then(campuses => {
     console.log('campuses = ', campuses)
+    //We should be returning just the updated campus, not all of them.
     res.json(campuses)
   })
   .catch(next)

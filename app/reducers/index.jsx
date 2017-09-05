@@ -118,7 +118,7 @@ export const changeCampus = function(oldCampusName, newCampusName) {
       })
     }
   }
-  
+
 
 export const createCampus = function(name, image) {
 
@@ -153,7 +153,7 @@ export const createStudent = function(name, email, assignedCampus) {
 }
 
 export const destroyStudent = function(studentId) {
-  
+
   //THUNK
   return function thunk(dispatch, getState) {
     axios.delete(`/api/students/${studentId}`)
@@ -165,6 +165,9 @@ export const destroyStudent = function(studentId) {
     .then(() => {
       let students = getState().students;
       const getStudentsAction = getStudents(students)
+
+      //Does this do anything? Did the deleteStudent action set the student slice of the
+      //state to the exact same thing that getState().students is returning now?
       dispatch(getStudentsAction);
     })
     .catch(err => {
@@ -178,12 +181,15 @@ export const destroyStudent = function(studentId) {
 const initialState = {
   students: [],
   campuses: [],
+
+  //Doesn't look like the reducer ever touches these 3 pieces of state
   campus: {},
   student: {},
   deletedStudent: {},
 };
 
-
+// This file is getting biiig. Maybe create two reducers, one for students
+// and one for campuses?
 //REDUCER
 const rootReducer = function(prevState = initialState, action) {
   const nextState = Object.assign({}, prevState);

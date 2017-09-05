@@ -5,6 +5,8 @@ import {createCampus} from '../../reducers'
 class AddCampus extends Component {
   constructor(props) {
     super(props);
+
+    // Do you even need this state? You don't appear to use it anywhere
     this.state = {
       campusName: '',
     }
@@ -51,13 +53,18 @@ const mapDispatchToProps = function(dispatch) {
   return {
     handleSubmit: event => {
       event.preventDefault();
-  
+
       const name = event.target.inputCampusName.value;
       const image = event.target.inputCampusImage.value;
-  
+
       const createCampusThunk = createCampus(name, image);
       dispatch(createCampusThunk);
-  
+
+      // No need to do this. Good thought, though.
+      // Had our inputs been controlled fields, meaning that they have an attribute of
+      // value={this.state.name}, then we would have needed to to have done a
+      // this.setState({name: ""})
+      // But we aren't using state anywhere in this component.
       event.target.inputCampusName.value = '';
       event.target.inputCampusImage.value = '';
     }

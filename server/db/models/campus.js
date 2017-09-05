@@ -19,6 +19,8 @@ Campus.beforeDestroy((campus) => {
   .then(students => {
     Promise.map(students, function(student) {
       //do something with students
+      // Maybe remove them?
+      return student.destroy()
     })
   })
 })

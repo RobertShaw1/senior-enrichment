@@ -15,6 +15,7 @@ function Campuses(props) {
         <button className="addCampus">ADD A CAMPUS</button>
       </Link>
 
+      {/* Nice job using this library! Looks great!*/}
       <Card.Group >
         {campuses.map(campus => {
           let path = `/Campuses/${campus.name}`

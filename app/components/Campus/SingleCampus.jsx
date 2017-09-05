@@ -24,24 +24,26 @@ class SingleCampus extends Component {
     this.showForm = this.showForm.bind(this);
   }
 
+  //How could have done this using react-router? You built your own!
   handleTabClick(event, {name}) {
     this.setState({
       activeItem: name === 'Campus Info' || name === 'Edit' ? name : 'Campus Info'
     })
   }
 
+  //How could have done this using react-router? You built your own!
   handleItemClick(event, {name}) {
     event.preventDefault();
     const newName = event.target.inputCampusName.value;
     const oldCampusName = this.props.match.params.CampusName;
     console.log('this.props = ', this.props)
-    this.props.changeCampus(oldCampusName, newName)    
+    this.props.changeCampus(oldCampusName, newName)
 
     this.setState({
       activeItem: name === 'Campus Info' || name === 'Edit' ? name : 'Campus Info'
     })
 
-    event.target.inputCampusName.value = '';    
+    event.target.inputCampusName.value = '';
   }
 
   handleNameChange(event) {
@@ -93,14 +95,14 @@ class SingleCampus extends Component {
                 <input className="form-control" name="inputStudentName" placeholder="Student Name" onChange={this.handleNameChange} />
               </div>
             </div>
-    
+
             <div className="form-group">
               <label htmlFor="inputEmail3" className="col-sm-2 control-label">Email</label>
               <div className="col-sm-10">
                 <input type="email" className="form-control" name="inputEmail" placeholder="Email" onChange={this.handleEmailChange} />
               </div>
             </div>
-    
+
             <div className="form-group">
               <label className="col-sm-2 control-label">Assigned Campus</label>
               <select name="inputCampus" id="inputCampus">
@@ -151,7 +153,7 @@ class SingleCampus extends Component {
           </Grid.Column>
           <Grid.Column width={8}>
           <Header as='h5'>Students</Header>
-            { selectedCampusStudents.length ? 
+            { selectedCampusStudents.length ?
               <List divided verticalAlign='middle'>
                 {selectedCampusStudents.map(student => {
                   let path = `/students/${student.name}`
@@ -198,28 +200,28 @@ const mapDispatchToProps = function(dispatch) {
   return {
     deleteStudent: (event, student) => {
       event.preventDefault();
-    
+
       const destroyStudentThunk = destroyStudent(student.id);
       dispatch(destroyStudentThunk);
       alert(`The Student ${student.name} was deleted!`)
     },
     handleSubmit: event => {
       event.preventDefault();
-  
+
       const name = event.target.inputStudentName.value;
       const email =  event.target.inputEmail.value;
       const assignedCampus = event.target.inputCampus.value;
-  
+
       const createStudentThunk = createStudent(name, email, assignedCampus);
       dispatch(createStudentThunk);
-  
+
       event.target.inputStudentName.value = '';
       event.target.inputEmail.value = '';
     },
     changeCampus: (oldCampusName, newName) => {
       const changeCampusThunk = changeCampus(oldCampusName, newName);
       dispatch(changeCampusThunk);
-  
+
       alert(`Update Successful!`)
     },
     handleDelete: event => {
